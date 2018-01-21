@@ -1,0 +1,8 @@
+(lp0
+c__main__
+line_bearing
+p1
+ac__main__
+para_bearing
+p2
+a.
