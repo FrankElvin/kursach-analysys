@@ -30,8 +30,7 @@ from modules.count_overload import get_overload
 
 earth_data = 'const2/earth_const_data.pkl'
 missile_data = 'const2/missile_const_data.pkl'
-# start_case = 'start_cond/start.pkl'
-start_case = 'start_cond/standart_mesh/start_range2200_heigth2500.pkl'
+start_case = 'start_cond/standart_mesh/start_range3000_heigth4000.pkl'
 bearing_case = 'flight_cond/bearing.pkl'
 
 start_case_folder = 'start_cond/standart_mesh/'
@@ -95,7 +94,7 @@ while True:
             print "%.2f\t\t\t%.2f\t\t\t%.2f " %(max_maneuver_time - 0.2*i, degrees(alpha), max(eta_k))
 
 	    # if its a stop
-	    if max(eta_k) >= max_overload:
+	    if max(eta_k) >= max_overload or degrees(alpha) < 2.:
 	    	print 'Too much overload. This is the optimum.'
 	    	break
             else:
