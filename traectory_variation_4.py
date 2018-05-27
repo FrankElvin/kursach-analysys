@@ -63,6 +63,9 @@ for start_case in listdir(start_case_folder):
     
     # Find initial time of maneuver
     max_maneuver_time = get_max_maneuver_time(start_case, bearing_case)[-1]
+
+    if Y_0 >= 2500:
+        max_maneuver_time = max_maneuver_time * .8
     
     # stop condition and step variable
     max_overload = 6.
