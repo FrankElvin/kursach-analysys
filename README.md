@@ -2,9 +2,8 @@
 
 # This repository stored code for a ATGM flight model.
 
-# Contains:
-## Executable Scripts
-
+# Contains
+## Executable Scripts 
 	* traektory_variation.py - main file that creates a 3d-arrays of start position, maximum overload during the flight and the penetration angle
 	* make_start_mesh.py - script that generates mesh files for chosen start conditions
 
