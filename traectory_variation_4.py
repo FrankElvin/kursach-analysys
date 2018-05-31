@@ -28,6 +28,9 @@ from modules.count_traektory import get_traektory
 # function of overload count
 from modules.count_overload import get_overload
 
+# for demonstration of progress
+from modules.progress_bar import print_progress
+
 earth_data = 'const2/earth_const_data.pkl'
 missile_data = 'const2/missile_const_data.pkl'
 start_case = 'start_cond/standart_mesh/start_range2000_heigth500.pkl'
@@ -38,6 +41,10 @@ start_case_folder = 'start_cond/standart_mesh/'
 result_file = open('result_file', 'w')
 file_counter = 0
 all_files = len(listdir(start_case_folder))
+
+# show the beginning of the wariation
+print ("Beginning the traektory variation.")
+print_progress(0, all_files)
 
 for start_case in listdir(start_case_folder):
     start_case = start_case_folder + start_case
@@ -65,12 +72,13 @@ for start_case in listdir(start_case_folder):
     max_maneuver_time = get_max_maneuver_time(start_case, bearing_case)[-1]
 
     if Y_0 >= 2500:
-        max_maneuver_time = max_maneuver_time * .8
+        max_maneuver_time = max_maneuver_time -1
     
     # stop condition and step variable
     max_overload = 6.
     i = 0
     out = []
+
     
     # main variation
     while True:
@@ -109,6 +117,8 @@ for start_case in listdir(start_case_folder):
         result_file.write('%g %g %.2f %2f 1\n' %(Y_0, X_target, degrees(alpha), max(eta_k)) )
 
     file_counter += 1
-    print '%d of %d files processed' %(file_counter, all_files)
+
+    print_progress(file_counter, all_files)
+    #print '%d of %d files processed' %(file_counter, all_files)
 
 result_file.close()

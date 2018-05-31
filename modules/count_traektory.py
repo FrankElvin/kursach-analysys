@@ -1,9 +1,25 @@
 from pickle import load
-from math import sin, cos, radians, atan
+from math import sin, cos, radians, atan, pi
 from numpy import array, linspace, concatenate, where, degrees, arctan, interp
 from scipy import integrate
 
 def get_traektory(earth_data, missile_data, start_case, bearing_case, bearing_fun):
+
+	# function of angle to target count
+	def get_angle(x_missile, y_missile, x_target, y_target):
+		if x_missile != x_target
+			angle = atan(
+				abs(1.*y_missile - y_target) /
+				abs(1.*x_missile - x_target)
+			)
+
+		if x_missile < x_target:
+			return angle
+		elif x_missile > x_target:
+			return pi - angle
+		else:
+			return pi/2
+
 	
 	# Launch parameters
 	launch_file = open(start_case, 'rb')
@@ -30,20 +46,36 @@ def get_traektory(earth_data, missile_data, start_case, bearing_case, bearing_fu
 
 	from earth_const import C43, ro_h, cs_h, p_h, g
 
+	# def dX1_dt(X, t=0):
+	# 	return array([
+	# 		g*nu0/(1-A*t) - i*C43(X[0]/cs_h(X[3]))*ro_h(X[3])*X[0]**2*g/(2*qm0*(1-A)) - g*sin(1.*atan((X[3]-Y_target)/(X[2]-X_target))+bearing_fun(t)),
+	# 		A,
+	# 		X[0]*cos(atan(1.*(X[3]-Y_target)/(X[2]-X_target))+bearing_fun(t)),
+	# 		X[0]*sin(atan(1.*(X[3]-Y_target)/(X[2]-X_target))+bearing_fun(t))
+	# 	])
+
+	# def dX2_dt(X, t=0):
+	# 	return array([
+	# 		- i*C43(X[0]/cs_h(X[3]))*ro_h(X[3])*X[0]**2*g/(2*qm0) - g*sin(atan(1.*(X[3]-Y_target)/(X[2]-X_target))+bearing_fun(t)),
+	# 		0,
+	# 		X[0]*cos(atan(1.*(X[3]-Y_target)/(X[2]-X_target))+bearing_fun(t)),
+	# 		X[0]*sin(atan(1.*(X[3]-Y_target)/(X[2]-X_target))+bearing_fun(t))
+	# 	])
+
 	def dX1_dt(X, t=0):
 		return array([
-			g*nu0/(1-A*t) - i*C43(X[0]/cs_h(X[3]))*ro_h(X[3])*X[0]**2*g/(2*qm0*(1-A)) - g*sin(1.*atan((X[3]-Y_target)/(X[2]-X_target))+bearing_fun(t)),
+			g*nu0/(1-A*t) - i*C43(X[0]/cs_h(X[3]))*ro_h(X[3])*X[0]**2*g/(2*qm0*(1-A)) - g*sin(get_angle(X[2], X[3], X_target, Y_target)-bearing_fun(t)),
 			A,
-			X[0]*cos(atan(1.*(X[3]-Y_target)/(X[2]-X_target))+bearing_fun(t)),
-			X[0]*sin(atan(1.*(X[3]-Y_target)/(X[2]-X_target))+bearing_fun(t))
+			X[0]*cos(get_angle(X[2], X[3], X_target, Y_target)-bearing_fun(t)),
+			-X[0]*sin(get_angle(X[2], X[3], X_target, Y_target)-bearing_fun(t))
 		])
 
 	def dX2_dt(X, t=0):
 		return array([
-			- i*C43(X[0]/cs_h(X[3]))*ro_h(X[3])*X[0]**2*g/(2*qm0) - g*sin(atan(1.*(X[3]-Y_target)/(X[2]-X_target))+bearing_fun(t)),
+			- i*C43(X[0]/cs_h(X[3]))*ro_h(X[3])*X[0]**2*g/(2*qm0) - g*sin(get_angle(X[2], X[3], X_target, Y_target)-bearing_fun(t)),
 			0,
-			X[0]*cos(atan(1.*(X[3]-Y_target)/(X[2]-X_target))+bearing_fun(t)),
-			X[0]*sin(atan(1.*(X[3]-Y_target)/(X[2]-X_target))+bearing_fun(t))
+			X[0]*cos(get_angle(X[2], X[3], X_target, Y_target)-bearing_fun(t)),
+			-X[0]*sin(get_angle(X[2], X[3], X_target, Y_target)-bearing_fun(t))
 		])
 
 	# count init conditions
@@ -58,8 +90,10 @@ def get_traektory(earth_data, missile_data, start_case, bearing_case, bearing_fu
 
 	# second step of integration
 	answer2 = integrate.odeint(dX2_dt, NU_2, t2)
-	answer2 = answer2[0: where(answer2[:,3]>0)[0][-1]]
-	t2 = t2[0: where(answer2[:,3]>0)[0][-1]+1]
+	#answer2 = answer2[0: where(answer2[:,3]>0)[0][-1]]
+	#t2 = t2[0: where(answer2[:,3]>0)[0][-1]+1]
+	answer2 = answer2[0: where(answer2[:,3]<0)[0][0]]
+	t2 = t2[0: len(answer2[:,3])]
 	V2, mu2, X2, Y2 = answer2.T
 
 	# concatenate results
