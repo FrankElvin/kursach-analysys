@@ -33,7 +33,7 @@ from modules.progress_bar import print_progress
 
 earth_data = 'const2/earth_const_data.pkl'
 missile_data = 'const2/missile_const_data.pkl'
-start_case = 'start_cond/standart_mesh/start_range2000_heigth500.pkl'
+#start_case = 'start_cond/standart_mesh/start_range2000_heigth500.pkl'
 bearing_case = 'flight_cond/bearing.pkl'
 
 start_case_folder = 'start_cond/standart_mesh/'
@@ -71,15 +71,11 @@ for start_case in listdir(start_case_folder):
     # Find initial time of maneuver
     max_maneuver_time = get_max_maneuver_time(start_case, bearing_case)[-1]
 
-    if Y_0 >= 2500:
-        max_maneuver_time = max_maneuver_time -1
-    
     # stop condition and step variable
     max_overload = 6.
     i = 0
     out = []
 
-    
     # main variation
     while True:
     
@@ -93,15 +89,15 @@ for start_case in listdir(start_case_folder):
         bear = map(bearing, t)
     
         try:
-            # for overload count
-            theta = arctan((Y-Y_target)/(X-X_target)) + [ bearing(x) for x in t ]
-            eta, eta_k = get_overload(V, theta, t)
+    	    # for overload count
+    	    theta = arctan((Y-Y_target)/(X-X_target)) + [ bearing(x) for x in t ]
+    	    eta, eta_k = get_overload(V, theta, t)
 
-            # for output
-            alpha = atan((X_target-X[-1])/Y[-1])
+	    # for output
+	    alpha = atan((X_target-X[-1])/Y[-1])
 
             # if its a stop
-            if max(eta_k) >= max_overload:
+            if max(eta_k) >= max_overload or degrees(alpha) <= 2.:
                 break
             else:
                 out = alpha, max(eta_k)
