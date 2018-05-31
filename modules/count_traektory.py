@@ -7,8 +7,8 @@ def get_traektory(earth_data, missile_data, start_case, bearing_case, bearing_fu
 
 	# function of angle to target count
 	def get_angle(x_missile, y_missile, x_target, y_target):
-		if x_missile != x_target
-			angle = atan(
+		if x_missile != x_target:
+						angle = atan(
 				abs(1.*y_missile - y_target) /
 				abs(1.*x_missile - x_target)
 			)
@@ -92,8 +92,11 @@ def get_traektory(earth_data, missile_data, start_case, bearing_case, bearing_fu
 	answer2 = integrate.odeint(dX2_dt, NU_2, t2)
 	#answer2 = answer2[0: where(answer2[:,3]>0)[0][-1]]
 	#t2 = t2[0: where(answer2[:,3]>0)[0][-1]+1]
-	answer2 = answer2[0: where(answer2[:,3]<0)[0][0]]
-	t2 = t2[0: len(answer2[:,3])]
+	try: 
+		answer2 = answer2[0: where(answer2[:,3]<0)[0][0]]
+		t2 = t2[0: len(answer2[:,3])]
+	except:
+		print("Error... Start was from {%s, %s}" %(X_target, Y_0))
 	V2, mu2, X2, Y2 = answer2.T
 
 	# concatenate results
