@@ -44,7 +44,7 @@ def get_traektory(earth_data, missile_data, start_case, bearing_case, bearing_fu
 	t1 = linspace(t_rdtt[0], t_rdtt[1], 1000)[:-1]
 	t2 = linspace(t_rdtt[1], t_oper[1], 1000)
 
-	from earth_const import C43, ro_h, cs_h, p_h, g
+	#from earth_const import C43, ro_h, cs_h, p_h, g
 
 	# def dX1_dt(X, t=0):
 	# 	return array([
@@ -96,7 +96,8 @@ def get_traektory(earth_data, missile_data, start_case, bearing_case, bearing_fu
 		answer2 = answer2[0: where(answer2[:,3]<0)[0][0]]
 		t2 = t2[0: len(answer2[:,3])]
 	except:
-		print("Error... Start was from {%s, %s}" %(X_target, Y_0))
+		pass
+		#print("Error... Start was from {%s, %s}" %(X_target, Y_0))
 	V2, mu2, X2, Y2 = answer2.T
 
 	# concatenate results

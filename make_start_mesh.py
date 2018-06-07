@@ -12,6 +12,7 @@ X_0 = 0.
 
 t_oper = [0, 40]
 max_start_range = 3700
+max_start_height = 4100
 dx = 100
 
 mesh_folder = 'start_cond/standart_mesh'
@@ -23,8 +24,8 @@ for the_file in os.listdir(mesh_folder):
         os.unlink(file_path)
 
 print_progress(0, max_start_range-dx)
-for start_range in range(2100, max_start_range, dx):
-	for start_heigth in range(600, 4000, dx):
+for start_range in range(2000, max_start_range, dx):
+	for start_heigth in range(600, max_start_height, dx):
 		Y_0 = start_heigth
 		X_target = start_range
 

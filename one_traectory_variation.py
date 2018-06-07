@@ -30,7 +30,7 @@ from modules.count_overload import get_overload
 
 earth_data = 'const2/earth_const_data.pkl'
 missile_data = 'const2/missile_const_data.pkl'
-start_case = 'start_cond/standart_mesh/start_range2100_heigth1600.pkl'
+start_case = 'start_cond/standart_mesh/start_range2200_heigth2000.pkl'
 bearing_case = 'flight_cond/bearing.pkl'
 
 start_case_folder = 'start_cond/standart_mesh/'
